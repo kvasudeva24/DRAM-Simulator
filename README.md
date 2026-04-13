@@ -34,7 +34,13 @@ and the next channel B and so on and so forth.
 I also understand to get the maximum throughput from the hardware we will stripe the data across a chip such that when we send the 64bytes, 
 we will be able to data burst.
 
+Furthermore, in the hardware there is a subarray abstraction to make sure the capacitance is passed onto the sense amplifier. This is not true 
+in the memory controller. This is a level of abstraction.
+
 To begin, I will start with my design specefications:
+
+I will have 32 bit addressing support. Thus that means I can serve 4GB of memory. We will have two memory channels meaning that each channel can service 2 GB.
+
 
 
 
