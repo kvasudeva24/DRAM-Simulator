@@ -41,7 +41,34 @@ To begin, I will start with my design specefications:
 
 I will have 32 bit addressing support. Thus that means I can serve 4GB of memory. We will have two memory channels meaning that each channel can service 2 GB.
 
+2 DIMMS = 1GB per Dimm
+2 ranks per DIMM = 512MB per rank
 
+We can design our system for 16 banks which leaves us with 
+32MB per bank
+
+Banks logically span the entire width of the Rank on the DIMM chip
+If we wanted to think of a bank as large square, we need 25 bits to index 32MB. Whether that be in some sort of square or rectangle. However
+since we need a 64 byte cache line we only need 19 bits as 2^6 = 64. and we dont need to index every possible byte. 
+
+19 row/column + 4 bank + 1 rank + 1 DIMM + 1 bit to decide which memory controller to go (determined by LLC) + 6 bits for cache line offset
+
+This is the abstraction provided by DRAM to the MEM controller. However we cannot have a 2^10 x 2^9 square bitline into a sense amplifier or else the capacitance will be lost. we need to make it smaller. 
+
+Since we have 19 bits to play with we can have 9 bits used for the subarray inside a bank. this means we have 512 subarrays. then our matrix can be a 2^5 by 2^5 grid. this is an 1024 byte matrix and we have 512 of them. 
+
+A single Bank is composed of 512 Subarrays. This ensures that bitline lengths remain short enough to satisfy the electrical requirements of the sense amplifiers, a detail abstracted away from the Memory Controller but vital for cycle-accurate latency modeling.
+
+Here is the address breakdown for the memory controller:
+
+0-5: offset
+6: memory controller interleave
+7: DIMM
+8: Rank
+9-12: Bank
+13-31: row/column ( we want the subarray to change the least so inside the bank,
+                    13-17: column, 18-22 row, 23-31: subarray)
+                
 
 
 
