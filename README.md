@@ -7,7 +7,7 @@ Order of a DRAM controller
 Memory Controller (1...*)
 channel (1)
 DIMMS (1..*)
-Rank (0..1)
+Rank (2)
 Banks (1...*)
 Subarray (1...*)
 Matrix (1...*)
@@ -71,7 +71,9 @@ Here is the address breakdown for the memory controller:
                 
 
 
+This is the physical implementation. The logical implementation is a lot differnet due to the fact that DRAM Chips exist. We interleave data and much more.
 
+Each DRAM chip techinally has a logical bank and logical row buffer which are fractions of the conceptual sizes.
 
 
 
